@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ Điển Gen Z</title>
+    <style>
+        /* Nền gradient động */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Gradient động */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Tiêu đề có hiệu ứng phát sáng */
+        h1 {
+            color: #ff4d6d;
+            font-size: 3.5em;
+            margin: 10px 0;
+            text-shadow: 0px 0px 10px #ff5e5e, 0px 0px 20px #ff6b6b;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff6b6b, 0 0 30px #ff7b7b;
+            }
+            to {
+                text-shadow: 0 0 20px #ff4d6d, 0 0 30px #ff6b6b, 0 0 40px #ff7b7b;
+            }
+        }
+
+        /* Hộp tìm kiếm có bóng mờ và màu sắc */
+        .search-container {
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 20px;
+            width: 85%;
+            max-width: 600px;
+            font-size: 1.5em;
+            border-radius: 30px;
+            border: 2px solid #ff4d6d;
+            outline: none;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        button {
+            padding: 18px 30px;
+            font-size: 1.2em;
+            background-color: #ff4d6d;
+            color: white;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff2b4d;
+            transform: scale(1.05);
+        }
+
+        /* Hộp hiển thị kết quả tìm kiếm */
+        .definition {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.85);
+            max-width: 600px;
+            transition: background 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Tiêu đề và mô tả -->
+    <h1>✨ Từ Điển Gen Z ✨</h1>
+    <p>Chào mừng bạn đến với từ điển Gen Z - Khám phá ngôn ngữ của giới trẻ!</p>
+
+    <!-- Hộp tìm kiếm -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Nhập từ khóa..." onkeydown="handleEnter(event)">
+        <button onclick="searchWord()">Tra cứu</button>
+    </div>
+
+    <!-- Hiển thị định nghĩa -->
+    <div class="definition" id="definition"></div>
+
+    <!-- JavaScript tra cứu từ -->
+    <script>
+        const dictionary = {
+            "hồng hài nhi": "yêu kém tuổi",
+            "ngưu ma vương": "yêu hơn tuổi",
+            "nhị lang thần": "yêu bằng tuổi nên có con mắt thứ ba cho sáng mắt ra :))))",
+            "tứ hải long vương": "Hội đồng quản trị",
+            "liễu như yên": "Nữ phụ phản diện",
+            "tôn ngộ không": "Yêu mấy anh boy phố cứng đầu nghịch như guỷ 👹",
+            "kim sí điểu": "Nhà mặt phố, bố làm to, cơ cấu gia phả không phải lo",
+            "thái thượng lão quân": "su gờ đết đy 🤑",
+            "tiểu tiên nữ": "Mấy em gái nhỏ tuổi xinh xắn",
+            "thần tiên tỉ tỉ": "chị gái lớn tuổi hơn",
+            "bạch nguyệt quang": "Mối tình đầu mình yêu đơn phương nhưng không có được",
+            "nốt chu sa": "Có được rồi nhưng không biết trân trọng nên để mất rồi nhớ đến hết đời 😌",
+            "ét o ét": "SOS",
+            "hạo thiên khuyển": "Người yêu cũ",
+            "6677": "xấu xấu bẩn bẩn",
+            "88": "tởm tởm",
+            "22": "hài hài",
+            "8386": "phát tài phát lộc",
+            "99": "chảnh chảnh/chán chán",
+            "tẻn tẻn": "đáng yêu",
+            "ib": "Inbox - Nhắn tin riêng",
+            "ad": "Admin (người quản lý fanpage, group)",
+            "phông bạt": "hành vi khoe khoang, phô trương",
+            "cali": "Cụm từ 'Cali' ám chỉ một nhóm người mang năng lượng tiêu cực",
+            "dth": "dễ thương",
+            "chs": "chơi",
+            "g9": "goodnight",
+            "bèo nhi": "chỉ con gái, giống như từ 'bánh bèo'",
+            "cộng tươi": "trai đẹp",
+            "môn em": "thích em",
+            "mát mát": "khùng khùng, ấm đầu",
+            "chè em nồng": "chồng em nè",
+            "kiwi kiwi": "ngon ngon",
+            "chằm zn": "Trầm Cảm",
+            "aka": "Also Known As - còn được biết đến là",
+            "giãy đành đạch": "vừa cười vừa giãy",
+            "hit": "nổi tiếng, được yêu thích",
+            "fc": "Fan Club hoặc Football Club",
+            "stalk": "theo dõi thông tin âm thầm",
+            "lò vi sóng": "quay đi quay lại với người yêu cũ",
+            "acc": "account - tài khoản",
+            "blog": "Nhật ký web",
+            "hít drama": "Hóng hớt các vụ nổi tiếng",
+            "girl/boy phố": "ăn mặc, nói chuyện theo kiểu ngầu ngầu, giang hồ các thứ",
+            "khum": "Không",
+            "sốp": "ông/bà",
+            "blink blink": "Lấp lánh, long lanh",
+            "debut": "ra mắt",
+            "ck": "Chồng/chuyển khoản",
+            "viral": "Nổi tiếng, tạo ra xu hướng",
+            "Acp": "chấp nhận kết bạn",
+            "Rep": "trả lời",
+            "Add": "Thêm vào/kết bạn"
+        };
+
+        function searchWord() {
+            const input = document.getElementById('search-input').value.trim().toLowerCase();  // Chuyển từ thành chữ thường
+            const definitionBox = document.getElementById('definition');
+            const definition = dictionary[input];
+
+            if (definition) {
+                definitionBox.textContent = `${input}: ${definition}`;
+            } else {
+                definitionBox.textContent = "Không tìm thấy từ này trong từ điển Gen Z!";
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === "Enter") {
+                searchWord();
+            }
+        }
+    </script>
+
+</body>
+</html>
